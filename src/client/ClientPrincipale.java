@@ -43,7 +43,6 @@ public class ClientPrincipale implements Runnable{
 		String message = "";
 		boolean connecter = true;
 		//REPONSE VERS LE SERVEUR
-	
 		dialogue(sc, sin, sout);
 		sin.close();
 		sout.close();
@@ -51,14 +50,13 @@ public class ClientPrincipale implements Runnable{
 		System.out.println("l'application se ferme");
 		this.terminer();
 		
-		this.terminer();
 	}
 	
-	private static void dialogue(Scanner sc, BufferedReader sin, PrintWriter sout) throws IOException{
+	private void dialogue(Scanner sc, BufferedReader sin, PrintWriter sout) throws IOException{
 		String message = "";
 		String reponse = "";
 		while(true){
-			//Réception du message
+			///Réception du message
 			message = sin.readLine();
 			//Vérification si le service s'est arrété
 			if(message.equals("Stop")){
@@ -75,6 +73,7 @@ public class ClientPrincipale implements Runnable{
 			//Affichage du message s'il doit être affiché
 			else
 				System.out.println("Serveur : " +message);
+			
 		}
 	}
 	

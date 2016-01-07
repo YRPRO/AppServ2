@@ -14,7 +14,6 @@ public class AppliClient {
 				Scanner sc = new Scanner(System.in);
 				String réponse = "";
 				
-				//DEBUT MODIF
 				//On demande au client s'il veut faire une réservation ou valider une préreservation
 				System.out.println("Voulez vous réserver ('1') ou valider une préreservation ('2')");
 				
@@ -32,9 +31,6 @@ public class AppliClient {
 					client.lancer();
 				}
 				
-				sc.close();
-				
-				//FIN MODIF
 				
 			} catch (UnknownHostException e) {
 				System.out.println("Erreur : probleme au niveau de la connexion client -> serveur");

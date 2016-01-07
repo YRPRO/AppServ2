@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import reservation.PreReservation;
+import vol.VolsSimple;
 
-public class ServiceValiderPrereservation implements IService {
+public class ServiceValiderPrereservation implements Runnable,IService {
 	
 	private Socket client;
 	private Thread t;
@@ -18,19 +19,22 @@ public class ServiceValiderPrereservation implements IService {
 	
 	public ServiceValiderPrereservation(Socket client) {
 		this.client = client;
-		this.t = new Thread();
-		//liste a remplir plus tard
+		this.t = new Thread(this);
 		this.listePrereservation = new ArrayList<PreReservation>();
+		//donnée de test
+		VolsSimple vol = new VolsSimple(50, "Londres", "07/01/2016", 500, "compagnie", 150);
+		for(int i = 0 ;i<10;i++);
+			this.listePrereservation.add(new PreReservation(vol, 5));
 	}
 	
 	
 	@Override
 	public void traitement() throws IOException {
 		//Streams pour le serveur
-		BufferedReader sin = new BufferedReader(new InputStreamReader(client.getInputStream()));
-		PrintWriter sout = new PrintWriter(client.getOutputStream(), true);
-				
-		sout.println("Nouvelle session bienvenu sur le service de validation des préreservation");
+		BufferedReader sin = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
+		PrintWriter sout = new PrintWriter(this.client.getOutputStream(), true);
+		
+		sout.println("Nouvelle session bienvenue sur le service de validation des préreservation");
 		sout.flush();
 		String reponseClient ="";
 		sout.println("Veuillez saisir un numéro de reservation :");
@@ -38,11 +42,23 @@ public class ServiceValiderPrereservation implements IService {
 		reponseClient = sin.readLine();
 		int numeroReservation = Integer.parseInt(reponseClient);
 		
-		while(this.numeroEstValide(numeroReservation)){
+		while(!this.numeroEstValide(numeroReservation)){
 			sout.println("Veuillez saisir un numéro valide (>0)");
 			reponseClient = sin.readLine();
 			numeroReservation = Integer.parseInt(reponseClient);
 		}
+		//message au client selon les differents cas
+		PreReservation p = this.prereservationExist(numeroReservation);
+		while(p == null){
+			sout.println("Votre reservation n'a pas été trouvée veuilez saisir à nouveau ");
+			reponseClient = sin.readLine();
+			numeroReservation = Integer.parseInt(reponseClient);
+			p = this.prereservationExist(numeroReservation);
+		}
+		if(prereservationEstValide(p))
+			sout.println("Votre préreservation est maintenant validée !");
+		else
+			sout.println("Votre prereservation n'est plus valide car le delais de 24h est depassé");
 		
 	}
 	
@@ -87,11 +103,11 @@ public class ServiceValiderPrereservation implements IService {
 	}
 	/**
 	 * Methode permettant de valider une prereservation grace à son numero
-	 * @param numero de la reservation
+	 * @param p la prereservation
 	 * @return true si elle valide (date < 24h et prereservation existe) false sinon
 	 */
-	private boolean prereservationEstValide(int numero){
-		PreReservation p = prereservationExist(numero);
+	private boolean prereservationEstValide(PreReservation p){
 		return p!=null && p.preReservationValide();
 	}
+	
 }
