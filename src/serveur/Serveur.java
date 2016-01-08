@@ -38,7 +38,6 @@ public class Serveur implements Runnable {
 					System.out.println("connexion avec le client reussi ");
 					//creation du service
 					IService service = this.factory.creer(this.typreService, socketClient); 
-					System.out.println(service.getClass());
 					//lancement du service
 					service.lancer();
 				}

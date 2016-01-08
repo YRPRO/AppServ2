@@ -73,11 +73,11 @@ public class LecteurFicherVol {
 	 * @param volsAserialiser
 	 * @throws FileNotFoundException
 	 */
-	public static void serialisationListToBin(List<VolsSimple> volsAserialiser) throws FileNotFoundException{
+	public static void serialisationListToBin(List<VolsSimple> volSAserialiser) throws FileNotFoundException{
 		FileOutputStream fichierVols = new FileOutputStream(NOM_FICHIER_BIN_SAUV);
 		try {
 			ObjectOutputStream objVols = new ObjectOutputStream(fichierVols);
-			objVols.writeObject(volsAserialiser);
+			objVols.writeObject(volSAserialiser);
 			objVols.flush();
 			objVols.close();
 		} catch (IOException e) {

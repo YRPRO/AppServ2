@@ -44,6 +44,8 @@ public class ClientPrincipale implements Runnable{
 		boolean connecter = true;
 		//REPONSE VERS LE SERVEUR
 		dialogue(sc, sin, sout);
+		//fermerture de l'application
+		this.socketClient.close();
 		sin.close();
 		sout.close();
 		sc.close();
@@ -55,16 +57,15 @@ public class ClientPrincipale implements Runnable{
 	private void dialogue(Scanner sc, BufferedReader sin, PrintWriter sout) throws IOException{
 		String message = "";
 		String reponse = "";
-		while(true){
+		boolean connexionEnCours = true;
+		while(connexionEnCours){
 			///Réception du message
 			message = sin.readLine();
 			//Vérification si le service s'est arrété
-			if(message.equals("Stop")){
-				return ;
-			}
-			
+			if(message.equalsIgnoreCase("stop"))
+				connexionEnCours = false;
 			//Vérification si le serveur attend une réponse
-			if(message.equals("AttenteReponse")){
+			else if(message.equals("AttenteReponse")){
 				reponse = sc.nextLine();
 				sout.println(reponse);
 				sout.flush();
@@ -73,8 +74,6 @@ public class ClientPrincipale implements Runnable{
 			//Affichage du message s'il doit être affiché
 			else
 				System.out.println("Serveur : " +message);
-			
 		}
 	}
-	
 }

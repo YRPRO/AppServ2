@@ -216,11 +216,11 @@ public class ServiceReservation implements Runnable, IService{
 			}
 		
 		
-		//verification : le numero de vol doit correspondre à un vols selectionner
+		//verification : le numero de vol doit correspondre à un vol selectionner
 		if(volTrouver)
 			volConfirmer = dialogueDemandeconfirmation(sin, sout);
-		else
-			while(!volTrouver)
+		else{
+			do{
 				envoieMessage("Le numéro de vol saisi ne correspond pas une nouvelle saisie est necessaire ", sout);
 				reponse =Integer.parseInt(sin.readLine());
 				for(Vol v : volsSelectionner){
@@ -229,14 +229,25 @@ public class ServiceReservation implements Runnable, IService{
 						break;
 					}
 				}
-		
-			
+			}
+			while(!volTrouver);
+		}			
+		volConfirmer = dialogueDemandeconfirmation(sin, sout);
 		//si le numero de vol correspond et le vol est confirmé alors la reservation est effectuée
 		if(volTrouver && volConfirmer){
 			envoieMessage("Votre vol est maintenant reserver (appuyer sur entrer)", sout);
 			//suppression des place
 			supprimerPlace(this.vols, reponse, nbPersonne);
 		}
+		else if(dialogueDemandeNouvelleRecherche(sin, sout))
+			this.traitement();
+		else{
+			//on ferme l'application dans ce cas
+			envoieMessage("stop", sout);
+			this.client.close();
+			this.terminer();
+		}
+			
 			
 		
 	}

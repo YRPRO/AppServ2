@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 import vol.Vol;
 
 public class PreReservation implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private static int NbReservation = 0;
 	private Vol volPreReserver;
 	private int nbPlace;
@@ -35,6 +36,10 @@ public class PreReservation implements Serializable{
 	
 	public int getNumeroReservation(){
 		return this.numeroReservation;
+	}
+	
+	public String toString(){
+		return "Numero de reservation : " + this.getNumeroReservation()+ " vol : " + this.volPreReserver.toString();
 	}
 	
 }
