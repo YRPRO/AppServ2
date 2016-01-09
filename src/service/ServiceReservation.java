@@ -231,8 +231,9 @@ public class ServiceReservation implements Runnable, IService{
 				}
 			}
 			while(!volTrouver);
+			volConfirmer = dialogueDemandeconfirmation(sin, sout);
 		}			
-		volConfirmer = dialogueDemandeconfirmation(sin, sout);
+		
 		//si le numero de vol correspond et le vol est confirmé alors la reservation est effectuée
 		if(volTrouver && volConfirmer){
 			envoieMessage("Votre vol est maintenant reserver (appuyer sur entrer)", sout);
